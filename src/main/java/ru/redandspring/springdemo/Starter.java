@@ -1,6 +1,7 @@
 package ru.redandspring.springdemo;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -23,16 +24,21 @@ public class Starter
         logger.info("Starting configuration...");
 
         ApplicationContext context = new AnnotationConfigApplicationContext(MainConfiguration.class);
-        logFormat(Arrays.stream(context.getBeanDefinitionNames()).collect(Collectors.joining("\n")));
+        logFormat(Arrays.stream(context.getBeanDefinitionNames()).collect(Collectors.toList()), "BEAN DEFINITION NAMES");
 
         GreetingService service = context.getBean(GreetingService.class);
-        logFormat(service.say());
+        logFormat(service.say(), "SAYS");
     }
 
-    private static void logFormat(String message)
+    private static void logFormat(List<String> messages, String title)
     {
-        logger.info("\n----------------------------------------\n"
-                + message
-                +"\n----------------------------------------\n");
+        final String format = " | %-94.94s |\n";
+        final String hr = " --------------------------------------------------------------------------------------------------\n";
+
+        logger.info("\n" + hr
+                + String.format(format, title)
+                + hr
+                + messages.stream().map(s -> String.format(format, s)).collect(Collectors.joining())
+                + hr);
     }
 }

@@ -24,10 +24,10 @@ public class GreetingServiceImpl implements GreetingService
     public GreetingDao greetingDao;
 
     @Override
-    public String say()
+    public List<String> say()
     {
         List<Greeting> greetings = greetingDao.getAll();
-        return greetings.stream().map(greeting -> "Hi " + greeting.getName()).collect(Collectors.joining("\n"));
+        return greetings.stream().map(greeting -> "Hi " + greeting.getName()).collect(Collectors.toList());
     }
 
     @Override
